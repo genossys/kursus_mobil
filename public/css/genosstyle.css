@@ -1,0 +1,296 @@
+html,
+body {
+    height: 100%;
+    font-family: 'Poppins', sans-serif;
+    padding: 0;
+    margin: 0;
+}
+
+.bodylogin{
+    background-color: rgba(0, 0, 0, 0.85);
+    height: 100%;
+    width: 100%;
+    margin-top: 0;
+    padding-top: 0;
+    background-position: 0, -100px;
+}
+
+.bodypolos{
+background-image: unset;
+}
+
+nav.home {
+    background-color: rgba(255, 255, 255, 1);
+}
+
+li.nav-item {
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+#toggler {
+    color: black;
+}
+
+nav.home li.nav-item .nav-link {
+    border-radius: 10px;
+    color: black;
+    font-size: 20px;
+    font-weight: 500;
+    font-weight: 500;
+    text-shadow: 2px;
+    transition: all 0.2s ease-in-out;
+}
+
+nav.home li.nav-item .nav-link:hover {
+    transform: scale(1.1);
+    color: red;
+}
+
+nav.home li.nav-item .nav-link:active {
+    transform: scale(1.1);
+    color: red;
+}
+
+li a i {
+    margin-left: 3px;
+}
+nav img {
+    height: 60px;
+}
+
+nav a.navbar-brand {
+    margin-left: 60px;
+}
+
+ul.navbar-nav {
+    margin-right: 100px;
+}
+
+.gambarfullhome {
+    height: 100%;
+    width: 100%;
+
+    background-image: url("../assets/gambar/gambarhome.jpg");
+    z-index: -1;
+    background-position: right;
+    background-repeat: no-repeat;
+}
+
+.bgtekshome {
+
+}
+
+
+.tekshome {
+    width: 40%;
+    height: 300px;
+    margin-left: 100px;
+    padding: 200px 0;
+    z-index: 2;
+}
+
+.judulhome {
+    font-size: 60px;
+    font-weight: 800;
+    color: red;
+    text-shadow: 3px 3px 5px black;
+
+}
+
+.isihome {
+    font-size: 25px;
+    font-weight: 300;
+    color: red;
+    text-shadow: 3px 3px 5px black;
+}
+
+.anJudul,
+.anIsi,
+.anBtn {
+    opacity: 0;
+    transform: translate(-50px, 0);
+    z-index: 1;
+}
+
+.anJudul {
+    transition: 3s;
+}
+
+.anIsi {
+    transition: 2s;
+}
+
+.anBtn {
+    transition: 1s;
+}
+
+.anJudul.jmuncul,
+.anIsi.jmuncul,
+.anBtn.jmuncul {
+    opacity: 1;
+    transform: translate(0, 0);
+}
+
+.produkkami{
+    background-color: rgba(255, 255, 255, 0.85);
+    padding-top: 30px;
+    padding-bottom: 30px;
+}
+.newproduk {
+    padding-top: 30px;
+    padding-bottom: 30px;
+    background-color: red;
+    min-height: 400px;
+
+}
+
+.modalproduk{
+    background-color: red;
+    border-radius: 10px;
+    box-shadow: 3px 3px 5px black;
+}
+
+
+.gambarnew {
+    height: 20vw;
+    object-fit: cover;
+    border-radius: 5px;
+}
+
+.inputjumlah {
+    text-align: center;
+    width: 50px;
+    display: inline-block;
+    border-radius: 0;
+    box-shadow: 3px 3px 5px grey;
+}
+
+.tombolpesan {
+    margin-top: 40px;
+}
+
+.input-plus {
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 0px;
+    box-shadow: 3px 3px 5px grey;
+}
+
+.input-min {
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
+    box-shadow: 3px 3px 5px grey;
+}
+
+.judulsection {
+    width: 300px;
+}
+
+.colnya {
+    padding: 5px;
+}
+
+.kartuproduk {
+    padding: 10px;
+    height: 320px;
+    border-radius: 10px;
+    background-color: red;
+    box-shadow: 3px 3px 5px grey;
+    overflow: hidden;
+}
+
+.kartuproduk img {
+    width: 100%;
+    height: 60%;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    object-fit: cover;
+    cursor: pointer;
+}
+
+.kartuproduk h3{
+    margin-top: 5px;
+        width: 100%;
+        text-align: center;
+        cursor: pointer;
+}
+
+.kartuproduk h4 {
+    width: 100%;
+}
+
+.kartuproduk h4 {
+    color: black;
+}
+
+.tombolpesankecil {
+    width: 88%;
+    bottom: 0;
+    margin-top: 0;
+    margin-right: 10px;
+    position: absolute;
+
+}
+
+.paketkami {
+    padding-top: 30px;
+    padding-bottom: 30px;
+    background-color: rgba(255, 215, 0, 0.85);
+
+}
+
+.footer {
+    line-height: 200px;
+    text-align: center;
+    width: 100%;
+    height: 200px;
+    color: white;
+    background-color: rgba(34, 34, 34, 0.85);
+}
+
+.kartupaket {
+    padding: 10px;
+    height: 500px;
+    border-radius: 10px;
+    background-color: white;
+    box-shadow: 3px 3px 5px grey;
+    overflow: hidden;
+}
+
+.kartupaket img {
+    width: 100%;
+    height: 40%;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    object-fit: cover;
+}
+
+.tombolpesanpaket {
+    width: 92%;
+    position: absolute;
+    bottom: 0px;
+}
+
+.namapaket{
+    margin-top: 10px;
+    color: red;
+}
+
+/* Modal Produk */
+.modalprodukdialog{
+    background-color: rgba(0, 0, 0, 0);
+    border: 0;
+}
+.modalprodukbody{
+    background-color: rgba(0, 0, 0, 0);
+
+}
+
+/* Utility */
+.btn-danger{
+    background-color: red;
+}
+
+.sidebar-dark-primary{
+    background-color: rgba(100, 0, 0, 1);
+}
