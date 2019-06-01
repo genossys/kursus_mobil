@@ -73,8 +73,7 @@ ul.navbar-nav {
 
     background-image: url("../assets/gambar/gambarhome.jpg");
     z-index: -1;
-    background-position: right;
-    background-repeat: no-repeat;
+    background-size: cover;
 }
 
 .bgtekshome {
