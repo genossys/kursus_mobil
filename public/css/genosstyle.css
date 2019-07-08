@@ -1,13 +1,13 @@
 html,
 body {
     height: 100%;
-    font-family: 'Poppins', sans-serif;
+    font-family: "Ubuntu", sans-serif;
     padding: 0;
     margin: 0;
 }
 
-.bodylogin{
-    background-color: rgba(0, 0, 0, 0.85);
+.bodylogin {
+    background-color: rgba(0, 0, 0, 0.7);
     height: 100%;
     width: 100%;
     margin-top: 0;
@@ -15,56 +15,64 @@ body {
     background-position: 0, -100px;
 }
 
-.bodypolos{
-background-image: unset;
-}
-
-nav.home {
-    background-color: rgba(255, 255, 255, 1);
+.bodypolos {
+    background-image: unset;
 }
 
 li.nav-item {
-    margin-left: 10px;
-    margin-right: 10px;
 }
 
 #toggler {
     color: black;
 }
 
+nav.home {
+    width: 100%;
+    position: absolute;
+    margin-left: 50px;
+    z-index: 2;
+    background-color: rgba(0, 0, 0, 0.3);
+}
+
 nav.home li.nav-item .nav-link {
     border-radius: 10px;
-    color: black;
+    color: white;
     font-size: 20px;
-    font-weight: 500;
-    font-weight: 500;
-    text-shadow: 2px;
-    transition: all 0.2s ease-in-out;
+    transition: 0.8s;
 }
 
 nav.home li.nav-item .nav-link:hover {
-    transform: scale(1.1);
-    color: red;
+    text-shadow: 0px 0px 5px cornflowerblue;
+    color: cornflowerblue;
 }
 
 nav.home li.nav-item .nav-link:active {
-    transform: scale(1.1);
-    color: red;
+    text-shadow: 0px 0px 10px red;
+}
+
+nav.home li.nav-item .nav-link:active {
+    text-shadow: 0px 0px 10px red;
 }
 
 li a i {
     margin-left: 3px;
 }
 nav img {
-    height: 60px;
+    height: 0px;
+}
+
+.navbar-badge {
+    width: 12px;
+    height: 12px;
+    font-size: 10px;
 }
 
 nav a.navbar-brand {
-    margin-left: 60px;
+    margin-left: 0px;
 }
 
 ul.navbar-nav {
-    margin-right: 100px;
+    margin-right: 0px;
 }
 
 .gambarfullhome {
@@ -77,38 +85,60 @@ ul.navbar-nav {
 }
 
 .bgtekshome {
-
+    width: 100%;
+    height: 100%;
+    padding-left: 100px;
+    padding-top: 150px;
 }
 
+.headermenu {
+    background-image: url("../assets/gambar/headermenu.jpg");
+    background-size: cover;
+    background-position-y: -270px;
+    height: 270px;
+    position: absolute;
+    width: 100%;
+    z-index: -1;
+}
 
 .tekshome {
     width: 40%;
     height: 300px;
-    margin-left: 100px;
-    padding: 200px 0;
     z-index: 2;
 }
 
 .judulhome {
-    font-size: 60px;
+    font-size: 50px;
     font-weight: 800;
-    color: red;
-    text-shadow: 3px 3px 5px black;
-
+    color: white;
+    text-shadow: 0px 0px 10px black;
 }
 
 .isihome {
     font-size: 25px;
     font-weight: 300;
-    color: red;
-    text-shadow: 3px 3px 5px black;
+    color: white;
+    text-shadow: 0px 0px 10px black;
+}
+
+.btn-depan {
+    margin-top: 50px;
+    background-color: cornflowerblue;
+    box-shadow: 0px 0px 10px black;
+    color: white;
+}
+
+.btn-depan:hover {
+    background-color: white;
+    box-shadow: 0px 0px 10px cornflowerblue;
+    color: cornflowerblue;
 }
 
 .anJudul,
 .anIsi,
 .anBtn {
     opacity: 0;
-    transform: translate(-50px, 0);
+    transform: translate(0, 100px);
     z-index: 1;
 }
 
@@ -131,7 +161,7 @@ ul.navbar-nav {
     transform: translate(0, 0);
 }
 
-.produkkami{
+.produkkami {
     background-color: rgba(255, 255, 255, 0.85);
     padding-top: 30px;
     padding-bottom: 30px;
@@ -139,17 +169,21 @@ ul.navbar-nav {
 .newproduk {
     padding-top: 30px;
     padding-bottom: 30px;
-    background-color: red;
+    background-image: url("../assets/gambar/bgslide.jpg");
+    background-size: cover;
     min-height: 400px;
-
+    padding-top: 160px;
 }
 
-.modalproduk{
-    background-color: red;
+.modalproduk {
+}
+
+.panelmodal {
+    background-color: rgba(255, 255, 255, 0.5);
+    width: 100%;
+    height: 100%;
     border-radius: 10px;
-    box-shadow: 3px 3px 5px black;
 }
-
 
 .gambarnew {
     height: 20vw;
@@ -172,13 +206,11 @@ ul.navbar-nav {
 .input-plus {
     border-top-right-radius: 0px;
     border-bottom-right-radius: 0px;
-    box-shadow: 3px 3px 5px grey;
 }
 
 .input-min {
     border-top-left-radius: 0px;
     border-bottom-left-radius: 0px;
-    box-shadow: 3px 3px 5px grey;
 }
 
 .judulsection {
@@ -189,53 +221,43 @@ ul.navbar-nav {
     padding: 5px;
 }
 
-.kartuproduk {
-    padding: 10px;
-    height: 320px;
-    border-radius: 10px;
-    background-color: red;
-    box-shadow: 3px 3px 5px grey;
+/* Kartu produk */
+.itemkartugambar {
+    grid-area: gambar;
     overflow: hidden;
+    flex: 1 0 24rem;
+    /* Margin value should be half of grid-gap value as margins on flex items don't collapse */
 }
 
-.kartuproduk img {
-    width: 100%;
-    height: 60%;
-    border-top-left-radius: 5px;
-    border-top-right-radius: 5px;
+.itemkartugambar img {
+    max-width: 100%;
     object-fit: cover;
-    cursor: pointer;
+    transition: transform 400ms ease-out;
+    display: block;
 }
 
-.kartuproduk h3{
-    margin-top: 5px;
-        width: 100%;
-        text-align: center;
-        cursor: pointer;
+.itemkartugambar img:hover {
+    transform: scale(1.15);
 }
 
-.kartuproduk h4 {
-    width: 100%;
+.itemkartukonten {
+    grid-area: konten;
 }
 
-.kartuproduk h4 {
-    color: black;
+.itemtombolkonten {
+    grid-area: tombol;
 }
 
-.tombolpesankecil {
-    width: 88%;
-    bottom: 0;
-    margin-top: 0;
-    margin-right: 10px;
-    position: absolute;
-
-}
-
-.paketkami {
-    padding-top: 30px;
-    padding-bottom: 30px;
-    background-color: rgba(255, 215, 0, 0.85);
-
+.kartuproduk {
+    display: grid;
+    grid-template-columns: 100px auto;
+    grid-template-rows: 120px 50px;
+    grid-template-areas:
+        "gambar konten"
+        "tombol tombol";
+    grid-gap: 5px;
+    background-image: linear-gradient(to top right, #00d2ff, #c4e0e5);
+    box-shadow: 2px 2px 5px grey;
 }
 
 .footer {
@@ -247,49 +269,47 @@ ul.navbar-nav {
     background-color: rgba(34, 34, 34, 0.85);
 }
 
-.kartupaket {
-    padding: 10px;
-    height: 500px;
-    border-radius: 10px;
-    background-color: white;
-    box-shadow: 3px 3px 5px grey;
-    overflow: hidden;
-}
-
-.kartupaket img {
-    width: 100%;
-    height: 40%;
-    border-top-left-radius: 5px;
-    border-top-right-radius: 5px;
-    object-fit: cover;
-}
-
-.tombolpesanpaket {
-    width: 92%;
-    position: absolute;
-    bottom: 0px;
-}
-
-.namapaket{
-    margin-top: 10px;
-    color: red;
-}
-
 /* Modal Produk */
-.modalprodukdialog{
-    background-color: rgba(0, 0, 0, 0);
-    border: 0;
-}
-.modalprodukbody{
-    background-color: rgba(0, 0, 0, 0);
-
-}
 
 /* Utility */
-.btn-danger{
+.btn-danger {
     background-color: red;
 }
 
-.sidebar-dark-primary{
-    background-color: rgba(100, 0, 0, 1);
+.sidebar-dark-primary {
+    background-color: #1a237e;
+}
+
+.tombolcarousel {
+    width: 5%;
+}
+
+/* baju */
+.baju {
+    background-color: rgba(240, 240, 240, 1);
+}
+
+/* tabelkeranjang */
+.tabelkeranjang {
+    padding-top: 140px;
+}
+
+.rekening {
+    background-color: rgba(255, 255, 255, 0.7);
+}
+
+.control-sidebar {
+    right: -500px;
+    width: 500px;
+    z-index: 99;
+    top: 0;
+    bottom: 0;
+}
+.control-sidebar:before {
+    right: -500px;
+    width: 500px;
+}
+
+.menupaket {
+    background-color: white;
 }

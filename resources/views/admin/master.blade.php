@@ -16,6 +16,7 @@
     <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
     <!-- Theme style -->
     <link rel="stylesheet" href="{{ asset('/adminlte/css/adminlte.min.css')}}">
+    <link rel="stylesheet" href="{{ asset('/css/bootstrap.min.css')}}">
     <!-- Genosstyle -->
     <link rel="stylesheet" href="{{ asset('/css/genosstyle.css')}}">
     <!-- bootstrap wysihtml5 - text editor -->
@@ -94,28 +95,35 @@
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
-                                    <a href="{{route ('paket')}}" class="nav-link ">
+                                    <a href="{{route('pagepaket')}}" class="nav-link ">
                                         <i class="fa fa-circle-o nav-icon"></i>
                                         <p>Data Paket</p>
                                     </a>
                                 </li>
 
                                 <li class="nav-item">
-                                    <a href="{{route ('mobil')}}" class="nav-link ">
+                                    <a href="{{route('pagemobil')}}" class="nav-link ">
                                         <i class="fa fa-circle-o nav-icon"></i>
                                         <p>Data Mobil</p>
                                     </a>
                                 </li>
 
                                 <li class="nav-item">
-                                    <a href="{{route ('tentor')}}" class="nav-link ">
+                                    <a href="{{route ('pagetentor')}}" class="nav-link ">
                                         <i class="fa fa-circle-o nav-icon"></i>
                                         <p>Data Tentor</p>
                                     </a>
                                 </li>
 
                                 <li class="nav-item ">
-                                    <a href="{{route ('user')}}" class="nav-link">
+                                    <a href="{{route('pagecustomer')}}" class="nav-link">
+                                        <i class="fa fa-circle-o nav-icon"></i>
+                                        <p>Data Customer</p>
+                                    </a>
+                                </li>
+
+                                <li class="nav-item ">
+                                    <a href="{{route('pageuser')}}" class="nav-link">
                                         <i class="fa fa-circle-o nav-icon"></i>
                                         <p>Data User</p>
                                     </a>
@@ -133,9 +141,9 @@
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
-                                    <a href="" class="nav-link ">
+                                    <a href="#" class="nav-link ">
                                         <i class="fa fa-circle-o nav-icon"></i>
-                                        <p>Order</p>
+                                        <p>Permintaan Paket</p>
                                     </a>
                                 </li>
 
