@@ -313,3 +313,15 @@ ul.navbar-nav {
 .menupaket {
     background-color: white;
 }
+
+.control-sidebar {
+    right: -500px;
+    width: 500px;
+    z-index: 99;
+    top: 0;
+    bottom: 0;
+}
+.control-sidebar:before {
+    right: -500px;
+    width: 500px;
+}

@@ -27,7 +27,7 @@ class LoginController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/admin';
+    protected $redirectTo = '/';
 
     /**
      * Create a new controller instance.
@@ -62,7 +62,7 @@ class LoginController extends Controller
         ]);
 
         if (Auth::attempt($request->only( $login_type, 'password'))) {
-            return redirect('/admin');
+            return redirect('/');
         } else {
             return redirect()->back()->with('gagal', 'user id/password salah');
         }

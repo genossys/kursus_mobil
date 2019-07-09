@@ -2,6 +2,7 @@
 @section('content')
 
 <section class="isipaket" style="min-height: 500px; z-index: 9">
+
     <div class="pencarian pt-2">
         <div class="row">
             <div class="col-sm-4">
@@ -66,6 +67,12 @@
 <script src="{{ asset('/js/tampilan/genosstyle.js') }}"></script>
 
 <script>
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+
     function pencarianmenu() {
 
         var typeMobil = "";
@@ -73,7 +80,7 @@
         var kaliPertemuan = "";
         $.ajax({
             type: 'GET',
-            url: '/admin/paket/caripaket',
+            url: '/caripaket',
             data: {
                 typeMobil: typeMobil,
                 jadwalBuka: jadwalBuka,

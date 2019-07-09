@@ -23,6 +23,13 @@ Route::get('/login', 'auth\LoginController@login')->name('login');
 Route::post('/postlogin', 'auth\LoginController@postlogin');
 Route::get('/logout', 'auth\LoginController@logout')->name('logout');
 
+Route::get('/caripaket', 'Master\paketController@caripaket')->name('caripaket');
+Route::get('/tampilpesanan', 'Transaksi\pesananController@tampilpesanan')->name('tampilpesanan');
+Route::post('/insertPesanan', 'Transaksi\pesananController@insertpesanan')->name('insertpesanan');
+Route::post('/deletePesanan', 'Transaksi\pesananController@deletepesanan')->name('deletepesanan');
+Route::get('/keranjangPesanan', 'Transaksi\pesananController@keranjangpesanan')->name('keranjangPesanan');
+Route::get('/checkoutPesanan', 'Transaksi\pesananController@checkoutPesanan')->name('checkoutPesanan');
+
 Route::get('/paket', function () {
     return view('/umum/paket');
 })->name('paket');
@@ -60,7 +67,7 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('/simpanPaket', 'Master\paketController@insert');
             Route::post('/editPaket', 'Master\paketController@edit');
             Route::delete('/deletePaket', 'Master\paketController@delete');
-            Route::get('/caripaket', 'Master\paketController@caripaket')->name('caripaket');
+
         });
 
         Route::group(['prefix' => 'mobil'], function () {

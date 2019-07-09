@@ -11,10 +11,10 @@ Form Login
         @if(session('gagal'))
         <script>
             Swal.fire({
-                type: 'error',
-                title: '{{session('
-                gagal ')}}!',
-            })
+            type: 'error',
+            title: 'Maaf',
+            text: 'User/Password Salah',
+        })
         </script>
         @endif
 

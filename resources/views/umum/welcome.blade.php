@@ -45,9 +45,37 @@
                     <a class="nav-link" href="">Kontak</a>
                 </li>
 
-                <li class="nav-item pl-4">
-                    <a class="nav-link" href="/login"> Login <i class="fa fa-user"></i></a>
+                @if (auth()->check())
+
+                @if (auth()->user()->hakAkses == 'admin' || auth()->user()->hakAkses == 'pimpinan')
+                <li class="nav-item ml-4">
+                    <a class="nav-link" href="{{route('admin')}}">Dashboard</a>
                 </li>
+                @endif
+
+                <li class="nav-item dropdown ml-4">
+                    <span class="badge badge-danger" style="float:right;margin-bottom:-10px">1</span>
+                    <a class="nav-link" data-toggle="dropdown" href="#">
+                        {{auth()->user()->username}}
+                        <i class="fa fa-user"></i>
+                        <span class="sr-only">(current)</span>
+
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right">
+                        <a href="#" class="dropdown-item dropdown-footer">Keranjang <span class="badge badge-danger">5</span></a>
+                        <a href="{{route('logout')}}" class="dropdown-item dropdown-footer">History Belanja</a>
+                        <hr>
+                        <a href="{{route('logout')}}" class="dropdown-item dropdown-footer">Logout</a>
+                    </div>
+                </li>
+                @else
+                <li class="nav-item ml-4">
+                    <a class="nav-link" href="/login">
+                        Login
+                        <i class="fa fa-user"></i>
+                    </a>
+                </li>
+                @endif
 
             </ul>
         </div>
