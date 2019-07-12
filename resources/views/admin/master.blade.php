@@ -141,9 +141,16 @@
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
-                                    <a href="#" class="nav-link ">
+                                    <a href="{{route('pagetransaksi')}}" class="nav-link ">
                                         <i class="fa fa-circle-o nav-icon"></i>
-                                        <p>Permintaan Paket</p>
+                                        <p>Daftar Pesanan</p>
+                                    </a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a href="" class="nav-link ">
+                                        <i class="fa fa-circle-o nav-icon"></i>
+                                        <p>Cek Data Pembayaran</p>
                                     </a>
                                 </li>
 

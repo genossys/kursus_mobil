@@ -1,5 +1,8 @@
 <div class="row pt-3">
+    @if (auth()->check())
     <input type="text" id="noTrans" name="noTrans" hidden value="{{noTrans_otomatis(auth()->user()->idCustomer)}}">
+    @endif
+
     @foreach($daftarpaket as $dp)
     <div class="col-md-4 mb-4">
         <div class="kartuproduk rounded">
@@ -26,14 +29,6 @@
     function btnKonfr(idPaket, harga) {
         var noTrans = $("#noTrans").val();
         var idCustomer = $("#idCustomer").val();
-        var fullDate = new Date();
-        var twoDigitMonth = ((fullDate.getMonth().length + 1) === 1) ? (fullDate.getMonth() + 1) : '0' + (fullDate.getMonth() + 1);
-        var tanggal = fullDate.getFullYear() + "-" + twoDigitMonth + "-" + fullDate.getDate();
-
-        var fullDateBatas = new Date(fullDate);
-        fullDateBatas.setDate(fullDate.getDate() + 3);
-        var twoDigitMonthBatas = ((fullDateBatas.getMonth().length + 1) === 1) ? (fullDateBatas.getMonth() + 1) : '0' + (fullDateBatas.getMonth() + 1);
-        var batasPembayaran = fullDateBatas.getFullYear() + "-" + twoDigitMonthBatas + "-" + fullDateBatas.getDate();
 
         Swal.fire({
             title: "Konfirmasi",
@@ -48,21 +43,18 @@
             if (result.value) {
                 $.ajax({
 
-                    type: "POST",
+                    type: "post",
                     url: "/insertPesanan",
                     data: {
                         'noTrans': noTrans,
                         'idPaket': idPaket,
                         'idCustomer': idCustomer,
                         'harga': harga,
-                        'batasPembayaran': batasPembayaran,
-                        'tanggal': tanggal,
                     },
                     cache: false,
                     success: function(response) {
                         tampilPesanan();
                         Swal.fire({
-                            position: 'top-end',
                             type: 'success',
                             title: 'Pesanan anda berhasil',
                             showConfirmButton: false,

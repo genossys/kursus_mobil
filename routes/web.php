@@ -26,14 +26,24 @@ Route::get('/logout', 'auth\LoginController@logout')->name('logout');
 Route::get('/caripaket', 'Master\paketController@caripaket')->name('caripaket');
 Route::get('/tampilpesanan', 'Transaksi\pesananController@tampilpesanan')->name('tampilpesanan');
 Route::post('/insertPesanan', 'Transaksi\pesananController@insertpesanan')->name('insertpesanan');
+Route::post('/insertTransaksi', 'Transaksi\transaksiController@insertTransaksi')->name('insertpesanan');
+
 Route::post('/deletePesanan', 'Transaksi\pesananController@deletepesanan')->name('deletepesanan');
+Route::post('/bayarsekarang', 'Transaksi\pesananController@bayarsekarang')->name('bayarsekarang');
+Route::post('/requestKursus', 'Transaksi\pesananController@requestKursus')->name('requestKursus');
 Route::get('/keranjangPesanan', 'Transaksi\pesananController@keranjangpesanan')->name('keranjangPesanan');
+Route::get('/historyTransaksi', 'Transaksi\transaksiController@historyTransaksi')->name('keranjangPesanan');
+Route::get('/tampilTransaksi', 'Transaksi\transaksiController@tampilTransaksi')->name('tampilTransaksi');
+Route::get('/pembayaran/{noTrans}', 'Transaksi\transaksiController@pembayaran')->name('pembayaran');
+
+Route::get('/pencarianMobil', 'Master\mobilController@pencarianMobil')->name('pencarianMobil');
+Route::get('/pencarianTentor', 'Master\tentorController@pencarianTentor')->name('pencarianTentor');
 Route::get('/checkoutPesanan', 'Transaksi\pesananController@checkoutPesanan')->name('checkoutPesanan');
+Route::get('/pesananadmin', 'Transaksi\pesananController@pesananadmin')->name('pesananadmin');
 
 Route::get('/paket', function () {
     return view('/umum/paket');
 })->name('paket');
-
 
 Route::group(['middleware' => 'auth'], function () {
 
@@ -84,6 +94,11 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('/simpanTentor', 'Master\tentorController@insert');
             Route::post('/editTentor', 'Master\tentorController@edit');
             Route::delete('/deleteTentor', 'Master\tentorController@delete');
+        });
+
+        Route::group(['prefix' => 'transaksi'], function () {
+            Route::get('/', 'Transaksi\transaksiController@index')->name('pagetransaksi');
+            Route::get('/dataTransaksi', 'Transaksi\transaksiController@getDataTransaksi');
         });
     });
 });

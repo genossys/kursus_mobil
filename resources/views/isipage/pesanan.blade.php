@@ -23,4 +23,4 @@
 </table>
 
 <h5 class="text-right"> {{formatRupiah($total)}}</h5>
-<button class="btn btn-info pull-right mt-2" data-widget="control-sidebar">Check Out</button>
+<a href="/keranjangPesanan" class="btn btn-info pull-right mt-2">Check Out</a>

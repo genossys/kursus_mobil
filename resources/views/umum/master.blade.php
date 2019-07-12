@@ -31,6 +31,7 @@
                 <span id="toggler"><i class="fa fa-bars" aria-hidden="true"></i></span>
             </button>
             <a class="navbar-brand" href="#">
+                <a class="text-danger" style="font-size: 30px">GAJAH MADA BARU</a>
                 <!-- <img src="{{ asset('/assets/gambar/logo2.png') }} " alt="logo" /> -->
             </a>
 
@@ -104,6 +105,8 @@
                 <button class="btn btn-danger pull-right" data-widget="control-sidebar"><i class="fa fa-trash" aria-hidden="true"></i></button>
                 @if (auth()->check())
                 <h6 class="pt-5">No. Transaksi {{noTrans_otomatis(auth()->user()->idCustomer)}}</h6>
+                <input id='noTrans' hidden value='{{noTrans_otomatis(auth()->user()->idCustomer)}}' />
+                <input id='idCustomer' hidden value='{{auth()->user()->idCustomer}}' />
                 @endif
 
                 <div id="pesanan">
@@ -124,6 +127,12 @@
     <script src="{{asset ('/adminlte/js/adminlte.js')}}"></script>
 
     <script>
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+
         function tampilPesanan() {
 
             var idCustomer = $("#idCustomer").val();
@@ -140,6 +149,10 @@
             });
         }
 
+        $(window).on("load", function() {
+            tampilPesanan();
+        });
+
         function deletePesanan(idPesanan) {
 
             $.ajax({
@@ -154,9 +167,7 @@
             });
         }
 
-        $(window).on("load", function() {
-            tampilPesanan();
-        });
+
     </script>
 
     @yield('script')

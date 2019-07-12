@@ -145,8 +145,6 @@ class pesananController extends Controller
         $pesanan->idPaket = $request->idPaket;
         $pesanan->idCustomer = $request->idCustomer;
         $pesanan->harga = $request->harga;
-        $pesanan->batasPembayaran = $request->batasPembayaran;
-        $pesanan->tanggal = $request->tanggal;
         $pesanan->save();
     }
 
@@ -160,14 +158,6 @@ class pesananController extends Controller
             ])
             ->get();
 
-        // $dataPesanan = pesananModel::query()
-        //     ->select('noTrans', 'idPaket', 'idCustomer', 'harga', 'tanggal', 'checkout', 'status_bayar','status_terima','batasPembayaran')
-        //     ->where([
-        //         ['idCustomer', '=', $request->idCustomer],
-        //         ['checkout', '=', '0']
-        //     ])
-        //     ->get();
-
         $total =  $dataPesanan->sum('harga');
         $contoh = $dataPesanan->first();
 
@@ -175,7 +165,7 @@ class pesananController extends Controller
             $returnHTML = view('isipage.pesanan')->with(['dataPesanan' => $dataPesanan, 'total' => $total])->render();
             return response()->json(array('success' => true, 'html' => $returnHTML));
         } else {
-            $returnHTML = view('isipage.paketkosong')->render();
+            $returnHTML = view('isipage.paketkosong')->with('kosong', 'Pesanan anda akan tampil disini')->render();
             return response()->json(array('success' => true, 'html' => $returnHTML));
         }
     }
@@ -196,6 +186,8 @@ class pesananController extends Controller
     {
         $dataPesanan = DB::table('tb_pesanan')
             ->leftJoin('tb_paket', 'tb_pesanan.idPaket', '=', 'tb_paket.idPaket')
+            ->leftJoin('tb_mobil', 'tb_pesanan.reqMobil', '=', 'tb_mobil.idMobil')
+            ->leftJoin('tb_tentor', 'tb_pesanan.reqTentor', '=', 'tb_tentor.idTentor')
             ->where([
                 ['tb_pesanan.idCustomer', '=', $request->idCustomer],
                 ['tb_pesanan.checkout', '=', '0']
@@ -209,7 +201,51 @@ class pesananController extends Controller
             $returnHTML = view('isipage.pesanandetail')->with(['dataPesanan' => $dataPesanan, 'total' => $total])->render();
             return response()->json(array('success' => true, 'html' => $returnHTML));
         } else {
-            $returnHTML = view('isipage.paketkosong')->render();
+            $returnHTML = view('isipage.paketkosong')->with('kosong', 'Pesanan anda akan tampil disini')->render();
+            return response()->json(array('success' => true, 'html' => $returnHTML));
+        }
+    }
+
+    public function requestKursus(Request $request)
+    {
+        $id = $request->idPesanan;
+        $pesanan = pesananModel::find($id);
+        $pesanan->reqTglMulai = $request->reqtgl;
+        $pesanan->reqWaktu = $request->reqjam;
+        $pesanan->reqMobil = $request->reqMobil;
+        $pesanan->reqTentor = $request->reqTentor;
+        $pesanan->save();
+    }
+
+    public function bayarsekarang(Request $request)
+    {
+        $noTrans = $request->noTrans;
+        $idCustomer = $request->idCustomer;
+        DB::table('tb_pesanan')
+            ->where('idCustomer', '=', $idCustomer)
+            ->where('noTrans', '=', $noTrans)
+            ->update(['checkout' => '1']);
+    }
+
+    public function pesananadmin(Request $request)
+    {
+        $dataPesanan = DB::table('tb_pesanan')
+            ->leftJoin('tb_paket', 'tb_pesanan.idPaket', '=', 'tb_paket.idPaket')
+            ->leftJoin('tb_mobil', 'tb_pesanan.reqMobil', '=', 'tb_mobil.idMobil')
+            ->leftJoin('tb_tentor', 'tb_pesanan.reqTentor', '=', 'tb_tentor.idTentor')
+            ->where([
+                ['tb_pesanan.noTrans', '=', $request->noTrans],
+            ])
+            ->get();
+
+        $total =  $dataPesanan->sum('harga');
+        $contoh = $dataPesanan->first();
+
+        if ($contoh != null) {
+            $returnHTML = view('isipage.pesanandetailadmin')->with(['dataPesanan' => $dataPesanan, 'total' => $total])->render();
+            return response()->json(array('success' => true, 'html' => $returnHTML));
+        } else {
+            $returnHTML = view('isipage.paketkosong')->with('kosong', 'Pesanan anda akan tampil disini')->render();
             return response()->json(array('success' => true, 'html' => $returnHTML));
         }
     }

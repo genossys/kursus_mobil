@@ -24,7 +24,7 @@ function formatuang($angka)
 
 function noTrans_otomatis($idCus)
 {
-    $sekarang = Carbon\Carbon::now()->format('YmdHHmmss');
+    $sekarang = Carbon\Carbon::now()->format('YmdHms');
     $notrans = $idCus . $sekarang;
 
     $pesanan = pesananModel::where('checkout', '=', '0')

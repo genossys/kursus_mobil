@@ -157,7 +157,7 @@ class paketController extends Controller
             $returnHTML = view('isipage.daftarpaket')->with('daftarpaket', $daftarpaket)->render();
             return response()->json(array('success' => true, 'html' => $returnHTML));
         } else {
-            $returnHTML = view('isipage.paketkosong')->render();
+            $returnHTML = view('isipage.paketkosong')->with('kosong','Paket yang anda cari tidak ada')->render();
             return response()->json(array('success' => true, 'html' => $returnHTML));
         }
     }

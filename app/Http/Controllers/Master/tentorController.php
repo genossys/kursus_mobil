@@ -24,7 +24,7 @@ class tentorController extends Controller
     public function getDataTentor()
     {
         $tentor = tentorModel::query()
-            ->select('idTentor','namaTentor', 'tanggalLahir', 'biodata', 'foto')
+            ->select('idTentor', 'namaTentor', 'tanggalLahir', 'biodata', 'foto')
             ->get();
 
         return DataTables::of($tentor)
@@ -131,5 +131,22 @@ class tentorController extends Controller
         ];
 
         return Validator::make($r->all(), $rules, $messages);
+    }
+
+    public function pencarianTentor(Request $request)
+    {
+        $cariTentor = $request->cariTentor;
+        $dataTentor = tentorModel::where('namaTentor', 'LIKE', "%" . $cariTentor . "%")
+            ->orwhere('biodata', 'LIKE', "%" . $cariTentor . "%")
+            ->get();
+        $contoh = $dataTentor->first();
+
+        if ($contoh != null) {
+            $returnHTML = view('isipage.pencarianTentor')->with('dataTentor', $dataTentor)->render();
+            return response()->json(array('success' => true, 'html' => $returnHTML));
+        } else {
+            $returnHTML = view('isipage.paketkosong')->with('kosong','Tentor yang anda cari tidak tersedia')->render();
+            return response()->json(array('success' => true, 'html' => $returnHTML));
+        }
     }
 }

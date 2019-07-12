@@ -67,11 +67,7 @@
 <script src="{{ asset('/js/tampilan/genosstyle.js') }}"></script>
 
 <script>
-    $.ajaxSetup({
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        }
-    });
+
 
     function pencarianmenu() {
 

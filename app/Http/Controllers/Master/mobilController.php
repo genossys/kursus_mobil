@@ -25,7 +25,7 @@ class mobilController extends Controller
     public function getDataMobil()
     {
         $mobil = mobilModel::query()
-            ->select('idMobil','merkMobil', 'typeMobil', 'tahun', 'noPol', 'gambar')
+            ->select('idMobil', 'merkMobil', 'typeMobil', 'tahun', 'noPol', 'gambar')
             ->get();
 
         return DataTables::of($mobil)
@@ -135,5 +135,24 @@ class mobilController extends Controller
         ];
 
         return Validator::make($r->all(), $rules, $messages);
+    }
+
+
+    public function pencarianMobil(Request $request)
+    {
+        $cariMobil = $request->cariMobil;
+        $dataMobil = mobilModel::where('merkMobil', 'LIKE', "%" . $cariMobil . "%")
+            ->orwhere('typeMobil', 'LIKE', "%" . $cariMobil . "%")
+            ->orwhere('tahun', 'LIKE', "%" . $cariMobil . "%")
+            ->get();
+        $contoh = $dataMobil->first();
+
+        if ($contoh != null) {
+            $returnHTML = view('isipage.pencarianmobil')->with('dataMobil', $dataMobil)->render();
+            return response()->json(array('success' => true, 'html' => $returnHTML));
+        } else {
+            $returnHTML = view('isipage.paketkosong')->with('kosong','Mobil yang anda cari tidak tersedia')->render();
+            return response()->json(array('success' => true, 'html' => $returnHTML));
+        }
     }
 }
