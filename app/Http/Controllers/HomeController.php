@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Master\tentorModel;
+use App\Master\mobilModel;
 
 class HomeController extends Controller
 {
@@ -25,4 +27,5 @@ class HomeController extends Controller
     {
         return view('admin.master');
     }
+
 }

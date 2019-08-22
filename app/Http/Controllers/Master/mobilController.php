@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Master;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\Validator;
 use App\Master\mobilModel;
 use Illuminate\Foundation\Auth\RegistersUsers;
@@ -12,7 +11,7 @@ use Illuminate\Foundation\Auth\RegistersUsers;
 
 class mobilController extends Controller
 {
-    //
+
     use RegistersUsers;
 
     protected $redirectTo = '/';
@@ -22,101 +21,83 @@ class mobilController extends Controller
         return view('admin.master.datamobil');
     }
 
-    public function getDataMobil()
+    public function laporanMobil()
     {
-        $mobil = mobilModel::query()
-            ->select('idMobil', 'merkMobil', 'typeMobil', 'tahun', 'noPol', 'gambar')
-            ->get();
-
-        return DataTables::of($mobil)
-            ->addIndexColumn()
-            ->addColumn('action', function ($mobil) {
-                return '<a class="btn-sm btn-warning" id="btn-edit" href="#" onclick="showEditMobil(\'' . $mobil->idMobil . '\',\'' . $mobil->merkMobil . '\', \'' . $mobil->typeMobil . '\', \'' . $mobil->tahun . '\', \'' . $mobil->noPol . '\',\'' . $mobil->gambar . '\', event)" ><i class="fa fa-edit"></i></a>
-                            <a class="btn-sm btn-danger" id="btn-delete" href="#" onclick="hapus(\'' . $mobil->idMobil . '\', event)" ><i class="fa fa-trash"></i></a>
-                        ';
-            })
-            ->rawColumns(['action'])
-            ->make(true);
+        return view('admin.laporan.laporanMobil');
     }
 
     public function insert(Request $r)
     {
-        if ($this->isValid($r)->fails()) {
-            return response()->json([
-                'valid' => false,
-                'errors' => $this->isValid($r)->errors()->all()
-            ]);
+        $validator = Validator::make(
+            $r->all(),
+            [
+                'urlFoto' => 'required|file|max:2048'
+            ]
+        );
+
+        if ($validator->passes()) {
+            $urlFoto = $r->file('urlFoto');
+            $new_name = $r->merkMobil . rand() . '.' . $urlFoto->getClientOriginalExtension();
+            $urlFoto->move(public_path('mobil'), $new_name);
+
+
+            $mobil = new mobilModel();
+            $mobil->merkMobil = $r->merkMobil;
+            $mobil->typeMobil = $r->typeMobil;
+            $mobil->tahun = $r->tahun;
+            $mobil->noPol = $r->noPol;
+            $mobil->gambar = $new_name;
+            $mobil->save();
+        } else { }
+    }
+
+    public function showMobil(Request $request)
+    {
+        $caridata = $request->caridata;
+        $state = $request->state;
+        $mobil = mobilModel::where('merkMobil', 'LIKE', '%' . $caridata . '%')
+            ->orwhere('typeMobil', 'LIKE', '%' . $caridata . '%')
+            ->orwhere('tahun', 'LIKE', '%' . $caridata . '%')
+            ->orwhere('noPol', 'LIKE', '%' . $caridata . '%')
+            ->get();
+
+        $contoh = $mobil->first();
+
+        if ($contoh != null) {
+            $returnHTML = view('isipage.tabelMobil')->with(['mobil'=> $mobil, 'state'=>$state])->render();
+            return response()->json(array('success' => true, 'html' => $returnHTML));
         } else {
-            try {
-                $mobil = new mobilModel();
-                $mobil->merkMobil = $r->merkMobil;
-                $mobil->typeMobil = $r->typeMobil;
-                $mobil->tahun = $r->tahun;
-                $mobil->noPol = $r->noPol;
-                $mobil->gambar = $r->gambar;
-                $mobil->save();
-                return response()->json([
-                    'valid' => true,
-                    'sqlResponse' => true,
-                    'data' => $mobil
-                ]);
-            } catch (\Throwable $th) {
-                return response()->json([
-                    'valid' => true,
-                    'sqlResponse' => false,
-                    'data' => $th
-                ]);
-            }
+            $returnHTML = view('isipage.datakosong')->with('kosong', 'Data mobil akan Tampil di sini ')->render();
+            return response()->json(array('success' => true, 'html' => $returnHTML));
         }
     }
 
 
     public function edit(Request $r)
     {
-        if ($this->isValid($r)->fails()) {
-            return response()->json([
-                'valid' => false,
-                'errors' => $this->isValid($r)->errors()->all()
-            ]);
-        } else {
-            try {
-                $id = $r->idMobil;
-                $data = [
-                    'merkMobil' => $r->merkMobil,
-                    'typeMobil' => $r->typeMobil,
-                    'tahun' => $r->tahun,
-                    'noPol' => $r->noPol,
-                    'tahun' => $r->tahun,
-                ];
-                mobilModel::query()
-                    ->where('idMobil', '=', $id)
-                    ->update($data);
-                return response()
-                    ->json([
-                        'sqlResponse' => true,
-                        'sukses' => $data,
-                        'valid' => true,
-                    ]);
-            } catch (\Throwable $th) {
-                return response()->json([
-                    'sqlResponse' => false,
-                    'data' => $th,
-                    'valid' => true,
-                ]);
-            }
-        }
-    }
 
-    public function delete(Request $r)
-    {
-        $id = $r->input('id');
-        mobilModel::query()
-            ->where('idMobil', '=', $id)
-            ->delete();
-        return response()->json([
-            'sukses' => 'Berhasil Di hapus' . $id,
-            'sqlResponse' => true,
-        ]);
+        $validator = Validator::make(
+            $r->all(),
+            [
+                'urlFoto' => 'required|file|max:2048'
+            ]
+        );
+
+        if ($validator->passes()) {
+            $urlFoto = $r->file('urlFoto');
+            $new_name = $r->merkMobil . rand() . '.' . $urlFoto->getClientOriginalExtension();
+            $urlFoto->move(public_path('mobil'), $new_name);
+        } else { }
+
+        $mobil = mobilModel::find($r->idMobil);
+        $mobil->merkMobil = $r->merkMobil;
+        $mobil->typeMobil = $r->typeMobil;
+        $mobil->tahun = $r->tahun;
+        $mobil->noPol = $r->noPol;
+        if ($r->urlFoto != "") {
+            $mobil->gambar = $new_name;
+        }
+        $mobil->save();
     }
 
     private function isValid(Request $r)
@@ -140,6 +121,7 @@ class mobilController extends Controller
 
     public function pencarianMobil(Request $request)
     {
+        $state = $request->state;
         $cariMobil = $request->cariMobil;
         $dataMobil = mobilModel::where('merkMobil', 'LIKE', "%" . $cariMobil . "%")
             ->orwhere('typeMobil', 'LIKE', "%" . $cariMobil . "%")
@@ -148,11 +130,32 @@ class mobilController extends Controller
         $contoh = $dataMobil->first();
 
         if ($contoh != null) {
-            $returnHTML = view('isipage.pencarianmobil')->with('dataMobil', $dataMobil)->render();
+            $returnHTML = view('isipage.pencarianmobil')->with(['dataMobil'=> $dataMobil, 'state'=>$state])->render();
             return response()->json(array('success' => true, 'html' => $returnHTML));
         } else {
-            $returnHTML = view('isipage.paketkosong')->with('kosong','Mobil yang anda cari tidak tersedia')->render();
+            $returnHTML = view('isipage.paketkosong')->with('kosong', 'Mobil yang anda cari tidak tersedia')->render();
             return response()->json(array('success' => true, 'html' => $returnHTML));
         }
+    }
+
+    public function showEditMobil(Request $request)
+    {
+        $id = $request->id;
+        $mobil = mobilModel::where('idMobil', $id)
+            ->first();
+
+        if ($mobil != null) {
+            $returnHTML = view('isipage.modalEditMobil')->with('mobil', $mobil)->render();
+            return response()->json(array('success' => true, 'html' => $returnHTML));
+        } else {
+            $returnHTML = view('isipage.datakosong')->with('kosong', 'Data mobil akan Tampil di sini ')->render();
+            return response()->json(array('success' => true, 'html' => $returnHTML));
+        }
+    }
+
+    public function deleteData(Request $request)
+    {
+        $mobil = mobilModel::find($request->idMobil);
+        $mobil->delete();
     }
 }

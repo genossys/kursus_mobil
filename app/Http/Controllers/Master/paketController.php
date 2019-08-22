@@ -146,7 +146,7 @@ class paketController extends Controller
             ->select('idPaket', 'namaPaket', 'typeMobil', 'kaliPertemuan', 'jadwalBuka', 'jadwalTutup', 'harga')
             ->where([
                 ['typeMobil', 'like', '%' . $request->typeMobil . '%'],
-                ['jadwalBuka', 'like', '%' . $request->jadwal . '%',],
+                ['jadwalBuka', 'like', '%' . $request->jadwalBuka . '%',],
                 ['kaliPertemuan', 'like', '%' . $request->kaliPertemuan . '%',]
             ])
             ->get();

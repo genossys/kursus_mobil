@@ -1,6 +1,6 @@
 <div class="row pt-3">
     @if (auth()->check())
-    <input type="text" id="noTrans" name="noTrans" hidden value="{{noTrans_otomatis(auth()->user()->idCustomer)}}">
+    <input type="text" id="noTrans" name="noTrans" hidden value="{{noTrans_otomatis(auth()->user()->username)}}">
     @endif
 
     @foreach($daftarpaket as $dp)
@@ -14,7 +14,8 @@
                 <a class="d-block font-weight-bold" style="font-size: 18px"> {{$dp->namaPaket}}</a>
                 <a class="d-block"> {{$dp->typeMobil}}</a>
                 <a class="d-block"> Jadwal {{$dp->jadwalBuka}} - {{$dp->jadwalTutup}} </a>
-                <a class="d-block text-dark font-weight-bold"> Rp. {{$dp->harga}} </a>
+                <a class="d-block"> {{$dp->kaliPertemuan}}x pertemuan </a>
+                <a class="d-block text-dark font-weight-bold"> {{formatRupiah($dp->harga)}} </a>
             </div>
             <div class="itemtombolkonten  p-2">
                 <button class="btn btn-sm btn-outline-dark" @if (auth()->check()) onclick="btnKonfr('{{$dp->idPaket}}','{{$dp->harga}}')" @else onclick="btnLogindulu()" @endif style="width: 100%;height: 100%">Pesan Sekarang</button>
@@ -28,7 +29,6 @@
 <script>
     function btnKonfr(idPaket, harga) {
         var noTrans = $("#noTrans").val();
-        var idCustomer = $("#idCustomer").val();
 
         Swal.fire({
             title: "Konfirmasi",
@@ -48,18 +48,18 @@
                     data: {
                         'noTrans': noTrans,
                         'idPaket': idPaket,
-                        'idCustomer': idCustomer,
                         'harga': harga,
                     },
                     cache: false,
                     success: function(response) {
-                        tampilPesanan();
+                        // location.reload();
+                        window.location.replace('/keranjangPesanan');
                         Swal.fire({
                             type: 'success',
                             title: 'Pesanan anda berhasil',
                             showConfirmButton: false,
                             timer: 1500
-                        })
+                        });
                     },
                     failure: function(response) {
 

@@ -24,6 +24,9 @@
     <!-- Google Font: Source Sans Pro -->
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
 
+    <link href="{{ asset('/css/sweetalert2.min.css') }}" rel="stylesheet">
+    <script src="{{ asset('/js/sweetalert2.min.js') }}"></script>
+
     @yield('css')
 </head>
 
@@ -85,6 +88,7 @@
                 <nav class="mt-2">
                     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                         <!-- Add icons to the links using the .nav-icon class with font-awesome or any other icon font library -->
+                        @if(auth()->user()->hakAkses == 'admin')
                         <li class="nav-item has-treeview ">
                             <a href="#" class="nav-link">
                                 <i class="nav-icon fa fa-database"></i>
@@ -143,12 +147,12 @@
                                 <li class="nav-item">
                                     <a href="{{route('pagetransaksi')}}" class="nav-link ">
                                         <i class="fa fa-circle-o nav-icon"></i>
-                                        <p>Daftar Pesanan</p>
+                                        <p>Daftar Transaksi</p>
                                     </a>
                                 </li>
 
                                 <li class="nav-item">
-                                    <a href="" class="nav-link ">
+                                    <a href="{{route('pagepembayaran')}}" class="nav-link ">
                                         <i class="fa fa-circle-o nav-icon"></i>
                                         <p>Cek Data Pembayaran</p>
                                     </a>
@@ -157,6 +161,7 @@
                             </ul>
                         </li>
 
+                        @endif
                         <li class="nav-item has-treeview ">
                             <a href="#" class="nav-link">
                                 <i class="nav-icon fa fa-bar-chart"></i>
@@ -166,10 +171,31 @@
                                 </p>
                             </a>
                             <ul class="nav nav-treeview">
+
                                 <li class="nav-item">
-                                    <a href="" class="nav-link ">
+                                    <a href="{{route('laporanTentor')}}" class="nav-link ">
                                         <i class="fa fa-circle-o nav-icon"></i>
-                                        <p>Laporan Data Order</p>
+                                        <p>Laporan Data Tentor</p>
+                                    </a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a href="{{route('laporanMobil')}}" class="nav-link ">
+                                        <i class="fa fa-circle-o nav-icon"></i>
+                                        <p>Laporan Data Mobil</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{route('laporantransaksi')}}" class="nav-link ">
+                                        <i class="fa fa-circle-o nav-icon"></i>
+                                        <p>Laporan Data Transaksi</p>
+                                    </a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a href="{{route('laporanpesanan')}}" class="nav-link">
+                                        <i class="fa fa-circle-o nav-icon"></i>
+                                        <p>Laporan Data Pesanan</p>
                                     </a>
                                 </li>
 
@@ -227,7 +253,13 @@
     <script src=" {{asset ('/adminlte/plugins/fastclick/fastclick.js')}}"></script>
     <!-- AdminLTE App -->
     <script src="{{asset ('/adminlte/js/adminlte.js')}}"></script>
-
+    <script>
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+    </script>
     @yield('script')
 </body>
 

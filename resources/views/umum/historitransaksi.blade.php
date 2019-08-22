@@ -7,6 +7,24 @@
 
     </div>
 </section>
+
+<!--Srart Modal -->
+<div class="modal fade" id="modalDetailTransaksi">
+    <div class="modal-dialog modal-lg">
+
+        <div class="modal-content">
+            <div class="modal-header">
+                <h6 class="modal-title">Detail Transaksi</h6>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <div class="modal-body" id="dataModalDetail">
+
+            </div>
+        </div>
+    </div>
+</div>
+<!-- EndModal -->
 @endsection
 
 
@@ -29,16 +47,31 @@
 <script>
     function tampilTransaksi() {
 
-        var idCustomer = $("#idCustomer").val();
+        var username = "";
 
         $.ajax({
             type: 'GET',
-            url: '/tampilTransaksi',
+            url: '/tampilTransaksiUser',
             data: {
-                idCustomer: idCustomer,
+                username: username,
             },
             success: function(data) {
                 $("#tampilanhistorybelanja").html(data.html);
+            }
+        });
+    }
+
+    function tampilDetailTransaksi(noTrans) {
+
+
+        $.ajax({
+            type: 'GET',
+            url: '/pesananadmin',
+            data: {
+                noTrans: noTrans,
+            },
+            success: function(data) {
+                $("#dataModalDetail").html(data.html);
             }
         });
     }

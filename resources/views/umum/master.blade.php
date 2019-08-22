@@ -22,7 +22,7 @@
 
 <body>
     @if (auth()->check())
-    <input value="{{auth()->user()->idCustomer}}" id="idCustomer" name="idCustomer" hidden>
+    <input value="{{auth()->user()->username}}" id="username" name="username" hidden>
     @endif
 
     <div class="wrapper">
@@ -46,7 +46,7 @@
                     </li>
 
                     <li class="nav-item ml-4">
-                        <a class="nav-link" href="#">Kontak</a>
+                        <a class="nav-link" href="/profil">Profil</a>
                     </li>
 
                     @if (auth()->check())
@@ -58,18 +58,22 @@
                     @endif
 
                     <li class="nav-item dropdown ml-4">
-                        <span class="badge badge-danger" style="float:right;margin-bottom:-10px">1</span>
+                        @if(sisaKeranjang(auth()->user()->username) != 0)
+                        <span class="badge badge-danger" style="float:right;margin-bottom:-10px">{{sisaKeranjang(auth()->user()->username)}}</span>
+                        @endif
                         <a class="nav-link" data-toggle="dropdown" href="#">
                             {{auth()->user()->username}}
                             <i class="fa fa-user"></i>
                             <span class="sr-only">(current)</span>
                         </a>
                         <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right">
-                            <a href="#" class="dropdown-item dropdown-footer" data-widget="control-sidebar" data-slide="true">Keranjang
-                                <span class="badge badge-danger" style="float:right;margin-bottom:-10px">1</span>
-
+                            <a href="/keranjangPesanan" class="dropdown-item dropdown-footer" >Keranjang
+                                @if(sisaKeranjang(auth()->user()->username) != 0)
+                                <span class="badge badge-danger">{{sisaKeranjang(auth()->user()->username)}}</span>
+                                @endif
                             </a>
-                            <a href="{{route('logout')}}" class="dropdown-item dropdown-footer">History Belanja</a>
+                            <a href="{{route('historyTransaksi')}}" class="dropdown-item dropdown-footer">History Belanja</a>
+                            <a href="{{route('jadwalKursus')}}" class="dropdown-item dropdown-footer">Jadwal Kursus</a>
                             <hr>
                             <a href="{{route('logout')}}" class="dropdown-item dropdown-footer">Logout</a>
                         </div>
@@ -95,7 +99,6 @@
 
         <div id="content" class="container menupaket rounded">
             @yield('content')
-
         </div>
 
         <aside class="control-sidebar control-sidebar-light">
@@ -104,9 +107,9 @@
                 <button class="btn btn-info" data-widget="control-sidebar"><i class="fa fa-arrow-circle-right" aria-hidden="true"></i></button>
                 <button class="btn btn-danger pull-right" data-widget="control-sidebar"><i class="fa fa-trash" aria-hidden="true"></i></button>
                 @if (auth()->check())
-                <h6 class="pt-5">No. Transaksi {{noTrans_otomatis(auth()->user()->idCustomer)}}</h6>
-                <input id='noTrans' hidden value='{{noTrans_otomatis(auth()->user()->idCustomer)}}' />
-                <input id='idCustomer' hidden value='{{auth()->user()->idCustomer}}' />
+                <h6 class="pt-5">No. Transaksi {{noTrans_otomatis(auth()->user()->username)}}</h6>
+                <input id='noTrans' hidden value='{{noTrans_otomatis(auth()->user()->username)}}' />
+                <input id='id' hidden value='{{auth()->user()->username}}' />
                 @endif
 
                 <div id="pesanan">
@@ -135,13 +138,13 @@
 
         function tampilPesanan() {
 
-            var idCustomer = $("#idCustomer").val();
+            var username = $("#username").val();
 
             $.ajax({
                 type: 'GET',
                 url: '/tampilpesanan',
                 data: {
-                    idCustomer: idCustomer,
+                    username: username,
                 },
                 success: function(data) {
                     $("#pesanan").html(data.html);
@@ -162,12 +165,10 @@
                     idPesanan: idPesanan,
                 },
                 success: function(data) {
-                    tampilPesanan();
+                    location.reload();
                 }
             });
         }
-
-
     </script>
 
     @yield('script')

@@ -8,5 +8,6 @@ class customerModel extends Model
 {
     //
     protected $table = 'tb_customer';
-    protected $fillable = ['username', 'email', 'password', 'nohp', 'alamat'];
+    protected $fillable = ['id','username', 'email', 'password', 'nohp', 'alamat'];
+    protected $primaryKey = 'id';
 }

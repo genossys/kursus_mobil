@@ -8,12 +8,14 @@
         <div class="tgltransaksi">Tanggal : {{ $dt->tanggal }}</div>
 
         <div>Detail Pembayaran</div>
+
         <div class="container">
             <div class="row text-center" style="background: grey; font-weight: bolder;">
                 <div class="col-sm-10">Description</div>
                 <div class="col-sm-2">Total</div>
             </div>
             <hr>
+
             <div class="row">
                 <div class="col-sm-9">Total Biaya</div>
                 <div class="col-sm-1 text-right">Rp. </div>
@@ -22,7 +24,9 @@
 
             <hr>
             <p style="font-weight: 700"> Upload Bukti Transfer dan Alamat pengiriman:</p>
-            <form action="#" method="POST" id="formbayar">
+            <form method="post" id="formbayar" enctype="multipart/form-data">
+                <input hidden value="{{ $dt->noTrans }}" id="noTrans" name="noTrans">
+
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
@@ -39,22 +43,23 @@
                         <div class="form-group">
                             <label>Bukti Transfer </label>
                             <div class="custom-file">
-                                <input type="file" class="custom-file-input" id="fileBuktiTf" name="fileBuktiTf">
+                                <input type="file" class="custom-file-input" id="urlFoto" name="urlFoto">
                                 <label class="custom-file-label" for="customFile">Pilih file</label>
                             </div>
                         </div>
                     </div>
                 </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary btn-lg" id="btnSimpan">Konfirmasi Pembayaran</button>
+                        </div>
+                    </div>
+
+                </div>
             </form>
 
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="form-group">
-                        <button class="btn btn-primary btn-lg" id="btnSimpan">Konfirmasi Pembayaran</button>
-                    </div>
-                </div>
-
-            </div>
         </div>
 
         <p>Pembayaran akan di cek dalam 24 jam setelah bukti transfer di upload. </p>
@@ -106,4 +111,46 @@
 @section('script')
 <script src="{{ asset('/js/tampilan/genosstyle.js') }}"></script>
 <script src="{{ asset('js/tampilan/fileinput.js') }}"></script>
+
+<script>
+    $('#formbayar').on('submit', function(event) {
+        event.preventDefault();
+        $.ajax({
+            method: 'post',
+            url: '/insertPembayaran',
+            data: new FormData(this),
+            contentType: false,
+            cache: false,
+            processData: false,
+            success: function(data) {
+                var noTrans = $("#noTrans").val();
+                var status = "menunggu";
+
+                $.ajax({
+                    type: 'POST',
+                    url: '/updateStatusPembayaran',
+                    data: {
+                        noTrans: noTrans,
+                        status: status,
+                    },
+                    success: function(response) {
+
+                        Swal.fire({
+                            type: 'success',
+                            title: 'Bukti Pembayaran anda akan segera kami konfirmasi',
+                            showConfirmButton: false,
+                            timer: 1500
+                        })
+
+                        window.location.href = "{{URL::to('/historyTransaksi')}}"
+                    },
+                    error: function(response) {
+                        alert('gagal \n' + response.responseText);
+                    }
+                });
+
+            }
+        });
+    });
+</script>
 @endsection

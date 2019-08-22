@@ -62,7 +62,12 @@ class LoginController extends Controller
         ]);
 
         if (Auth::attempt($request->only( $login_type, 'password'))) {
-            return redirect('/');
+            if(auth()->user()->hakAkses == 'admin'){
+                return redirect('/admin');
+            }else{
+                return redirect('/');
+
+            }
         } else {
             return redirect()->back()->with('gagal', 'user id/password salah');
         }

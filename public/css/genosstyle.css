@@ -161,6 +161,31 @@ ul.navbar-nav {
     transform: translate(0, 0);
 }
 
+.visimisi {
+    background-color: rgba(200, 200, 200, 1);
+    min-height: 200px;
+    padding: 50;
+}
+
+.tentorKami {
+    background-color: rgba(255, 255, 255, 1);
+    min-height: 200px;
+    padding: 50;
+}
+
+.mobilKami {
+    background-color: rgba(200, 200, 200, 1);
+    min-height: 200px;
+    padding: 50;
+}
+
+.slick-prev:before {
+    color: black;
+}
+.slick-next:before {
+    color: black;
+}
+
 .produkkami {
     background-color: rgba(255, 255, 255, 0.85);
     padding-top: 30px;
@@ -251,7 +276,7 @@ ul.navbar-nav {
 .kartuproduk {
     display: grid;
     grid-template-columns: 100px auto;
-    grid-template-rows: 120px 50px;
+    grid-template-rows: 160px 50px;
     grid-template-areas:
         "gambar konten"
         "tombol tombol";

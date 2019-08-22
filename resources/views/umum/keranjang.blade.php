@@ -9,7 +9,7 @@
     </div>
 
     <div class="pt-4 text-left">
-        <h5 class="text-info">No. Transaksi {{noTrans_otomatis(auth()->user()->idCustomer)}}</h5>
+        <h5 class="text-info">No. Transaksi {{noTrans_otomatis(auth()->user()->username)}}</h5>
         <div id="keranjangPesanan">
 
         </div>
@@ -47,7 +47,7 @@
                     <div class="form-group">
                         <label>Jam</label>
                         <div class="input-group date" id="datetimepicker2" data-target-input="nearest">
-                            <input type="text" class="form-control datetimepicker-input" data-toggle="datetimepicker" data-target="#datetimepicker2" id="jadwalTutup" name="jadwalTutup" />
+                            <input type="text" class="form-control datetimepicker-input" data-toggle="datetimepicker" data-target="#datetimepicker2" id="jadwalTutup" name="jadwalTutup" value="08:00:00" />
                             <div class="input-group-append" data-target="#datetimepicker2" data-toggle="datetimepicker">
                                 <div class="input-group-text"><i class="fa fa-clock-o"></i></div>
                             </div>
@@ -58,7 +58,7 @@
                 <div class="form-group">
                     <label>Mobil</label>
                     <div class="input-group">
-                        <input type="text" class="form-control float-left" name="merkMobil" id="merkMobil">
+                        <input type="text" class="form-control float-left" name="merkMobil" id="merkMobil" onclick="PencarianMobil()" readonly>
                         <div class="input-group-append">
                             <button class="btn btn-info input-group-text" onclick="PencarianMobil()" data-toggle="modal" data-target="#modalMobil">
                                 <i class="fa fa-search"></i>
@@ -70,9 +70,9 @@
                 <div class="form-group">
                     <label>Tentor</label>
                     <div class="input-group">
-                        <input type="text" class="form-control float-left" name="namaTentor" id="namaTentor">
+                        <input type="text" class="form-control float-left" name="namaTentor" id="namaTentor" onclick="PencarianTentor()" readonly>
                         <div class="input-group-append">
-                            <button class="btn btn-info input-group-text" onclick="PencarianTentor()" data-toggle="modal" data-target="#modalTentor">
+                            <button class="btn btn-info input-group-text" onclick="PencarianTentor()" data-toggle="modal" data-target="#modalTentor" >
                                 <i class="fa fa-search"></i>
                             </button>
                         </div>
@@ -215,13 +215,13 @@
 
     function tampilKeranjang() {
 
-        var idCustomer = $("#idCustomer").val();
+        var username = $("#username").val();
 
         $.ajax({
             type: 'GET',
             url: '/checkoutPesanan',
             data: {
-                idCustomer: idCustomer,
+                username: username,
             },
             success: function(data) {
                 $("#keranjangPesanan").html(data.html);

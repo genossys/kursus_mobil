@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Validator;
 use App\Master\pesananModel;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\DB;
+use App\Master\mobilModel;
+use App\Master\tentorModel;
 
 class pesananController extends Controller
 {
@@ -22,22 +24,41 @@ class pesananController extends Controller
         return view('admin.master.datapesanan');
     }
 
-    public function getDataPesanan()
+    public function laporanPesanan()
     {
-        $pesanan = pesananModel::query()
-            ->select('idPesanan', 'merkPesanan', 'typePesanan', 'tahun', 'noPol', 'gambar')
+        $mobil = mobilModel::distinct()->get('merkMobil');
+        $tentor = tentorModel::select('namaTentor')->get();
+        return view('admin.laporan.laporanpesanan')->with(['mobil' => $mobil, 'tentor' => $tentor]);
+    }
+
+    public function showlaporanpesanan(Request $request)
+    {
+        $dariTanggal = $request->dariTanggal;
+        $sampaiTanggal = $request->sampaiTanggal;
+        $mobil = $request->mobil;
+        $tentor = $request->tentor;
+
+        $pesanan = pesananModel::join('tb_paket', 'tb_pesanan.idPaket', 'tb_paket.idPaket')
+            ->join('tb_mobil', 'tb_pesanan.reqMobil', 'tb_mobil.idMobil')
+            ->join('tb_tentor', 'tb_pesanan.reqTentor', 'tb_tentor.idTentor')
+            ->join('tb_transaksi', 'tb_pesanan.noTrans', 'tb_transaksi.noTrans')
+            ->wherebetween('reqTglMulai', [$dariTanggal, $sampaiTanggal])
+            ->where('merkMobil', 'LIKE', '%' . $mobil . '%')
+            ->where('namaTentor', 'LIKE', '%' . $tentor . '%')
+            ->where('status_terima', 'diterima')
             ->get();
 
-        return DataTables::of($pesanan)
-            ->addIndexColumn()
-            ->addColumn('action', function ($pesanan) {
-                return '<a class="btn-sm btn-warning" id="btn-edit" href="#" onclick="showEditPesanan(\'' . $pesanan->idPesanan . '\',\'' . $pesanan->merkPesanan . '\', \'' . $pesanan->typePesanan . '\', \'' . $pesanan->tahun . '\', \'' . $pesanan->noPol . '\',\'' . $pesanan->gambar . '\', event)" ><i class="fa fa-edit"></i></a>
-                            <a class="btn-sm btn-danger" id="btn-delete" href="#" onclick="hapus(\'' . $pesanan->idPesanan . '\', event)" ><i class="fa fa-trash"></i></a>
-                        ';
-            })
-            ->rawColumns(['action'])
-            ->make(true);
+        $contoh = $pesanan->first();
+
+        if ($contoh != null) {
+            $returnHTML = view('isipage.tabelpesananLaporan')->with('pesanan', $pesanan)->render();
+            return response()->json(array('success' => true, 'html' => $returnHTML));
+        } else {
+            $returnHTML = view('isipage.datakosong')->with('kosong', 'Data pesanan akan Tampil di sini ')->render();
+            return response()->json(array('success' => true, 'html' => $returnHTML));
+        }
     }
+
 
     public function insert(Request $r)
     {
@@ -143,7 +164,7 @@ class pesananController extends Controller
         $pesanan = new pesananModel();
         $pesanan->noTrans = $request->noTrans;
         $pesanan->idPaket = $request->idPaket;
-        $pesanan->idCustomer = $request->idCustomer;
+        $pesanan->usernameCustomer = auth()->user()->username;
         $pesanan->harga = $request->harga;
         $pesanan->save();
     }
@@ -153,7 +174,7 @@ class pesananController extends Controller
         $dataPesanan = DB::table('tb_pesanan')
             ->leftJoin('tb_paket', 'tb_pesanan.idPaket', '=', 'tb_paket.idPaket')
             ->where([
-                ['tb_pesanan.idCustomer', '=', $request->idCustomer],
+                ['tb_pesanan.usernameCustomer', '=', $request->username],
                 ['tb_pesanan.checkout', '=', '0']
             ])
             ->get();
@@ -189,7 +210,7 @@ class pesananController extends Controller
             ->leftJoin('tb_mobil', 'tb_pesanan.reqMobil', '=', 'tb_mobil.idMobil')
             ->leftJoin('tb_tentor', 'tb_pesanan.reqTentor', '=', 'tb_tentor.idTentor')
             ->where([
-                ['tb_pesanan.idCustomer', '=', $request->idCustomer],
+                ['tb_pesanan.usernameCustomer', '=', $request->username],
                 ['tb_pesanan.checkout', '=', '0']
             ])
             ->get();
@@ -220,32 +241,27 @@ class pesananController extends Controller
     public function bayarsekarang(Request $request)
     {
         $noTrans = $request->noTrans;
-        $idCustomer = $request->idCustomer;
         DB::table('tb_pesanan')
-            ->where('idCustomer', '=', $idCustomer)
             ->where('noTrans', '=', $noTrans)
             ->update(['checkout' => '1']);
     }
 
     public function pesananadmin(Request $request)
     {
-        $dataPesanan = DB::table('tb_pesanan')
-            ->leftJoin('tb_paket', 'tb_pesanan.idPaket', '=', 'tb_paket.idPaket')
+        $dataPesanan = pesananModel::leftJoin('tb_paket', 'tb_pesanan.idPaket', '=', 'tb_paket.idPaket')
             ->leftJoin('tb_mobil', 'tb_pesanan.reqMobil', '=', 'tb_mobil.idMobil')
             ->leftJoin('tb_tentor', 'tb_pesanan.reqTentor', '=', 'tb_tentor.idTentor')
-            ->where([
-                ['tb_pesanan.noTrans', '=', $request->noTrans],
-            ])
+            ->where('noTrans', $request->noTrans)
             ->get();
 
         $total =  $dataPesanan->sum('harga');
         $contoh = $dataPesanan->first();
 
         if ($contoh != null) {
-            $returnHTML = view('isipage.pesanandetailadmin')->with(['dataPesanan' => $dataPesanan, 'total' => $total])->render();
+            $returnHTML = view('isipage.pesanandetailadmin')->with(['dataPesanan' => $dataPesanan, 'total' => $total, 'customer' => $contoh])->render();
             return response()->json(array('success' => true, 'html' => $returnHTML));
         } else {
-            $returnHTML = view('isipage.paketkosong')->with('kosong', 'Pesanan anda akan tampil disini')->render();
+            $returnHTML = view('isipage.paketkosong')->with('kosong', 'Pesanan anda akan tampil disini ')->render();
             return response()->json(array('success' => true, 'html' => $returnHTML));
         }
     }

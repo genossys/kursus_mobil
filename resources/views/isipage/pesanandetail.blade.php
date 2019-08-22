@@ -23,7 +23,7 @@
             <td>{{$dp->namaTentor}}</td>
             <td>{{formatRupiah($dp->harga)}}</td>
             <td>
-                <button class="btn btn-warning btn-sm pull-center" data-toggle="modal" data-target="#exampleModal" onclick="setid('{{$dp->id}}')"> <i class="fa fa-clock-o" aria-hidden="true"></i></button>
+                <button class="btn btn-warning btn-sm pull-center" data-toggle="modal" data-target="#exampleModal" onclick="setid('{{$dp->id}}','{{$dp->namaPaket}}')"> <i class="fa fa-clock-o" aria-hidden="true"></i></button>
                 <button class="btn btn-danger btn-sm pull-center" onclick="deletePesanan('{{$dp->id}}')"> <i class="fa fa-close" aria-hidden="true"></i></button>
             </td>
         </tr>
@@ -55,8 +55,9 @@
     var twoDigitMonthBatas = ((fullDateBatas.getMonth().length + 1) === 1) ? (fullDateBatas.getMonth() + 1) : '0' + (fullDateBatas.getMonth() + 1);
     var batasPembayaran = fullDateBatas.getFullYear() + "-" + twoDigitMonthBatas + "-" + fullDateBatas.getDate();
 
-    function setid(id) {
+    function setid(id, namaPaket) {
         $("#idPesananRequest").val(id);
+        $("#exampleModalLabel").text(namaPaket)
     }
 
     function insertketransaksi(total) {
@@ -82,18 +83,16 @@
     function bayarsekarang(total) {
 
         var noTrans = $("#noTrans").val();
-        var idCustomer = $('#idCustomer').val();
         $.ajax({
             type: 'POST',
             url: '/bayarsekarang',
             data: {
                 noTrans: noTrans,
-                idCustomer: idCustomer,
             },
             success: function(data) {
                 Swal.fire({
                     type: 'success',
-                    title: 'Lakukan pembayaran sebelum tanggal '+batasPembayaran,
+                    title: 'Lakukan pembayaran sebelum tanggal ' + batasPembayaran,
                     showConfirmButton: false,
                     timer: 1500
                 });

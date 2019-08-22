@@ -26,7 +26,7 @@ class customerController extends Controller
     public function showFormRegistrasi()
     {
         $this->middleware('guest');
-        return view('auth.register');
+        return view('auth.registermember');
     }
 
     public function getDataCustomer()
@@ -38,14 +38,13 @@ class customerController extends Controller
         return DataTables::of($customer)
             ->addIndexColumn()
             ->addColumn('action', function ($customer) {
-                return '<a class="btn-sm btn-warning" id="btn-edit" href="#" onclick="showEditCustomer(\'' . $customer->username . '\', \'' . $customer->email . '\', \'' . $customer->nohp . '\', \'' . $customer->alamat . '\', event)" ><i class="fa fa-edit"></i></a>
-                            <a class="btn-sm btn-danger" id="btn-delete" href="#" onclick="hapus(\'' . $customer->username . '\', event)" ><i class="fa fa-trash"></i></a>
+                return '<a class="btn-sm btn-danger" id="btn-delete" href="#" onclick="hapus(\'' . $customer->username . '\', event)" ><i class="fa fa-trash"></i></a>
                         ';
             })
             ->rawColumns(['action'])
             ->make(true);
     }
-    
+
 
     public function register(Request $r)
     {
@@ -58,7 +57,7 @@ class customerController extends Controller
                 $member->username = $r->username;
                 $member->email = $r->email;
                 $member->password = Hash::make($r->password);
-                $member->nohp = $r->nohp;
+                $member->nohp = "62".$r->nohp;
                 $member->alamat = $r->alamat;
                 $member->save();
                 $credentials = $r->only('email', 'password');
@@ -71,8 +70,8 @@ class customerController extends Controller
                 return 'Error Program ' . $th;
             }
         }
-        
-        
+
+
     }
 
     public function insert(Request $r)
@@ -162,7 +161,7 @@ class customerController extends Controller
         ];
 
         $rules = [
-            'username' => 'required|max:10|unique:tb_customer',
+            'username' => 'required|max:50|unique:tb_customer',
             'email' => 'required|max:255|unique:tb_customer',
             'password' => 'required|min:5|confirmed',
             'nohp' => 'required|numeric|digits_between:1,15',

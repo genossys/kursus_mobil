@@ -159,29 +159,42 @@ function editData() {
 
 function hapus(id, e) {
     e.preventDefault();
-    if (confirm('Apakah Anda Yakin Menghapus Data ' + id + '? ')) {
+    Swal.fire({
+        title: "Anda yakin?",
+        text: "data ini akan di hapus!",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Ya, hapus saja!"
+    }).then(result => {
+        if (result.value) {
+            $.ajax({
+                    type: 'POST',
+                    url: '/admin/paket/deletePaket',
+                    data: {
+                        _method: 'DELETE',
+                        _token: $('input[name=_token]').val(),
+                        id: id
+                    },
+                success: function(response) {
+                    console.log(response);
 
-        $.ajax({
-            type: 'POST',
-            url: '/admin/paket/deletePaket',
-            data: {
-                _method: 'DELETE',
-                _token: $('input[name=_token]').val(),
-                id: id
-            },
-            success: function (response) {
-                console.log(response);
-                if (response.sqlResponse) {
-                    alert('Data Berhasil Di Hapus');
-                    table.draw();
-                } else {
-                    alert(response.sqlResponse);
+                    if (response.sqlResponse) {
+                        Swal.fire(
+                            "Deleted!",
+                            "Data berhasil di hapus",
+                            "success"
+                        );
+                        table.draw();
+                    } else {
+                        alert(response.sqlResponse);
+                    }
+                },
+                error: function(response) {
+                    alert("gagal \n" + response.responseText);
                 }
-            },
-            error: function (response) {
-                alert(response.responseText);
-            }
-
-        });
-    }
+            });
+        }
+    });
 }

@@ -11,24 +11,24 @@ Form Login
         @if(session('gagal'))
         <script>
             Swal.fire({
-            type: 'error',
-            title: 'Maaf',
-            text: 'User/Password Salah',
-        })
+                type: 'error',
+                title: '{{session('
+                gagal ')}}!',
+            })
         </script>
         @endif
 
         <div class="login-box" style="padding-top: 100px;margin-top: 0">
             <div class="login-logo">
-                <a href=""><b style="color: white"> Login</b></a>
+                <a href=""><b style="color: white"> LOGIN</b></a>
             </div>
             <!-- /.login-logo -->
-            <div class="login-box-body">
+            <div class="login-box-body rounded">
                 <p class="login-box-msg">Silahkan Login</p>
 
                 <form method="post" action="/postlogin">
                     {{csrf_field()}}
-                    <div class="form-group has-feedback">
+                    <div class="form-group has-feedback ">
                         <input type="text" class="form-control" name="username" placeholder="username atau email">
                         <span class="glyphicon glyphicon-user form-control-feedback"></span>
                     </div>

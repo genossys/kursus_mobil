@@ -21,99 +21,9 @@ class tentorController extends Controller
         return view('admin.master.datatentor');
     }
 
-    public function getDataTentor()
+    public function laporanTentor()
     {
-        $tentor = tentorModel::query()
-            ->select('idTentor', 'namaTentor', 'tanggalLahir', 'biodata', 'foto')
-            ->get();
-
-        return DataTables::of($tentor)
-            ->addIndexColumn()
-            ->addColumn('action', function ($tentor) {
-                return '<a class="btn-sm btn-warning" id="btn-edit" href="#" onclick="showEditTentor(\'' . $tentor->idTentor . '\',\'' . $tentor->namaTentor . '\', \'' . $tentor->tanggalLahir . '\', \'' . $tentor->biodata . '\', \'' . $tentor->foto . '\', event)" ><i class="fa fa-edit"></i></a>
-                            <a class="btn-sm btn-danger" id="btn-delete" href="#" onclick="hapus(\'' . $tentor->idTentor . '\', event)" ><i class="fa fa-trash"></i></a>
-                        ';
-            })
-            ->rawColumns(['action'])
-            ->make(true);
-    }
-
-    public function insert(Request $r)
-    {
-        if ($this->isValid($r)->fails()) {
-            return response()->json([
-                'valid' => false,
-                'errors' => $this->isValid($r)->errors()->all()
-            ]);
-        } else {
-            try {
-                $tentor = new tentorModel();
-                $tentor->namaTentor = $r->namaTentor;
-                $tentor->tanggalLahir = $r->tanggalLahir;
-                $tentor->biodata = $r->biodata;
-                $tentor->foto = $r->foto;
-                $tentor->save();
-                return response()->json([
-                    'valid' => true,
-                    'sqlResponse' => true,
-                    'data' => $tentor
-                ]);
-            } catch (\Throwable $th) {
-                return response()->json([
-                    'valid' => true,
-                    'sqlResponse' => false,
-                    'data' => $th
-                ]);
-            }
-        }
-    }
-
-
-    public function edit(Request $r)
-    {
-        if ($this->isValid($r)->fails()) {
-            return response()->json([
-                'valid' => false,
-                'errors' => $this->isValid($r)->errors()->all()
-            ]);
-        } else {
-            try {
-                $id = $r->idTentor;
-                $data = [
-                    'namaTentor' => $r->namaTentor,
-                    'tanggalLahir' => $r->tanggalLahir,
-                    'biodata' => $r->biodata,
-                    'foto' => $r->foto,
-                ];
-                tentorModel::query()
-                    ->where('idTentor', '=', $id)
-                    ->update($data);
-                return response()
-                    ->json([
-                        'sqlResponse' => true,
-                        'sukses' => $data,
-                        'valid' => true,
-                    ]);
-            } catch (\Throwable $th) {
-                return response()->json([
-                    'sqlResponse' => false,
-                    'data' => $th,
-                    'valid' => true,
-                ]);
-            }
-        }
-    }
-
-    public function delete(Request $r)
-    {
-        $id = $r->input('id');
-        tentorModel::query()
-            ->where('idTentor', '=', $id)
-            ->delete();
-        return response()->json([
-            'sukses' => 'Berhasil Di hapus' . $id,
-            'sqlResponse' => true,
-        ]);
+        return view('admin.laporan.laporanTentor');
     }
 
     private function isValid(Request $r)
@@ -145,8 +55,102 @@ class tentorController extends Controller
             $returnHTML = view('isipage.pencarianTentor')->with('dataTentor', $dataTentor)->render();
             return response()->json(array('success' => true, 'html' => $returnHTML));
         } else {
-            $returnHTML = view('isipage.paketkosong')->with('kosong','Tentor yang anda cari tidak tersedia')->render();
+            $returnHTML = view('isipage.paketkosong')->with('kosong', 'Tentor yang anda cari tidak tersedia')->render();
             return response()->json(array('success' => true, 'html' => $returnHTML));
         }
+    }
+
+    public function insert(Request $r)
+    {
+        $validator = Validator::make(
+            $r->all(),
+            [
+                'urlFoto' => 'required|file|max:2048'
+            ]
+        );
+
+        if ($validator->passes()) {
+            $urlFoto = $r->file('urlFoto');
+            $new_name = $r->namaTentor . rand() . '.' . $urlFoto->getClientOriginalExtension();
+            $urlFoto->move(public_path('tentor'), $new_name);
+
+
+            $tentor = new tentorModel();
+            $tentor->namaTentor = $r->namaTentor;
+            $tentor->tanggalLahir = $r->tanggalLahir;
+            $tentor->biodata = $r->biodata;
+            $tentor->foto = $new_name;
+            $tentor->save();
+        } else { }
+    }
+
+    public function showTentor(Request $request)
+    {
+        $state = $request->state;
+        $caridata = $request->caridata;
+        $tentor = tentorModel::where('namaTentor', 'LIKE', '%' . $caridata . '%')
+            ->orwhere('tanggalLahir', 'LIKE', '%' . $caridata . '%')
+            ->orwhere('biodata', 'LIKE', '%' . $caridata . '%')
+            ->get();
+
+        $contoh = $tentor->first();
+
+        if ($contoh != null) {
+            $returnHTML = view('isipage.tabelTentor')->with(['tentor'=> $tentor, 'state' => $state])->render();
+            return response()->json(array('success' => true, 'html' => $returnHTML));
+        } else {
+            $returnHTML = view('isipage.datakosong')->with('kosong', 'Data tentor akan Tampil di sini ')->render();
+            return response()->json(array('success' => true, 'html' => $returnHTML));
+        }
+    }
+
+
+    public function edit(Request $r)
+    {
+
+        $validator = Validator::make(
+            $r->all(),
+            [
+                'urlFoto' => 'required|file|max:2048'
+            ]
+        );
+
+        if ($validator->passes()) {
+            $urlFoto = $r->file('urlFoto');
+            $new_name = $r->namaTentor . rand() . '.' . $urlFoto->getClientOriginalExtension();
+            $urlFoto->move(public_path('tentor'), $new_name);
+        } else { }
+
+        $tentor = tentorModel::find($r->idTentor);
+        $tentor->namaTentor = $r->namaTentor;
+        $tentor->tanggalLahir = $r->tanggalLahir;
+        $tentor->biodata = $r->biodata;
+        if ($r->urlFoto != "") {
+            $tentor->foto = $new_name;
+        }
+        $tentor->save();
+    }
+
+
+
+    public function showEditTentor(Request $request)
+    {
+        $id = $request->id;
+        $tentor = tentorModel::where('idTentor', $id)
+            ->first();
+
+        if ($tentor != null) {
+            $returnHTML = view('isipage.modalEditTentor')->with('tentor', $tentor)->render();
+            return response()->json(array('success' => true, 'html' => $returnHTML));
+        } else {
+            $returnHTML = view('isipage.datakosong')->with('kosong', 'Data tentor akan Tampil di sini ')->render();
+            return response()->json(array('success' => true, 'html' => $returnHTML));
+        }
+    }
+
+    public function deleteData(Request $request)
+    {
+        $tentor = tentorModel::find($request->idTentor);
+        $tentor->delete();
     }
 }

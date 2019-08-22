@@ -130,10 +130,10 @@ Data Paket
 
 
 @section('script')
+
 <script src="{{ asset('/js/tampilan/fileinput.js') }}"></script>
 <script src="{{ asset('js/jquery.dataTables.min.js') }}"></script>
 <script src="{{ asset('js/dataTablesBootstrap4.js') }}"></script>
-<script src="{{ asset('/js/Master/paket.js') }}"></script>
 <script src="{{ asset ('/js/moment-with-locales.js')}}"></script>
 <script type="text/javascript" src="{{ asset ('/js/tempusdominus-bootstrap-4.min.js')}}"></script>
 <script type="text/javascript">
@@ -149,7 +149,6 @@ Data Paket
         });
     });
 </script>
-
-
+<script src="{{ asset('/js/Master/paket.js') }}"></script>
 
 @endsection
